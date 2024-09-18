@@ -1,0 +1,70 @@
+//------------------------------------------------
+//--- 010 Editor v14.0 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+local int i;
+
+FSkip(0x18);
+int SeqOffset;
+
+FSeek(SeqOffset);
+char Creator[4];
+char Type[4];
+int ChunkSize;
+short unknown;
+short Count;
+
+struct{
+    for (i=0; i<Count; i++) {
+        struct{
+            short Offset <format=hex>;
+            short Unknown;
+        } Unknown <read=Str("%08X", this.Offset+SeqOffset)>;
+    }
+} SequenceList;
+
+struct SoundDataMaybe {
+    ubyte Length <comment="Each increment is +25.6k samples on playback (?)">;
+    ubyte SampleIndex <format=hex>;
+    ubyte Unknown;
+    ubyte Volume;
+    ubyte LengthRelated;
+};
+
+
+struct SampleData {
+    ubyte SampleIndex;
+    ubyte Volume <comment="clamped to min/max properties set by .hd sample chunk">;
+};
+
+struct{
+    for (i=0; i<Count; i++) {
+        struct{
+            
+            SampleData Sample <read=Str("Sample=%d, Volume=%d", this.SampleIndex ^ 0x80, this.Volume)>;
+            SampleData Sample <read=Str("Sample=%d, Volume=%d", this.SampleIndex ^ 0x80, this.Volume)>;
+            SampleData Sample <read=Str("Sample=%d, Volume=%d", this.SampleIndex ^ 0x80, this.Volume)>;
+            SampleData Sample <read=Str("Sample=%d, Volume=%d", this.SampleIndex ^ 0x80, this.Volume)>;
+            ubyte volume;
+            byte DelayUntilNextSequence; 
+            ubyte DelayMultiplier;
+            SampleData ExtraSample <read=Str("Sample=%d, Volume=%d", this.SampleIndex ^ 0x80, this.Volume)>;
+            ubyte Unknown; 
+            ubyte Unknown;
+            ubyte Unknown;
+            ubyte Unknown;
+            ubyte Unknown;
+            ubyte Unknown;
+            ubyte Unknown;
+        } Sequence;
+    }
+} SequenceData;
