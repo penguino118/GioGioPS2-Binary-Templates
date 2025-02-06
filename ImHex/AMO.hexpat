@@ -52,7 +52,8 @@ struct VertexIndex {
 };
 
 struct TriStripIndex{
-    u32 count;
+    u16 count;
+    u16 unknown;
     VertexIndex indices[count];
 };
 
