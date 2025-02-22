@@ -13,7 +13,7 @@ struct SectorHead {
 
 struct RootTree{
     SectorHead header;
-    u32 root_bone[header.data_count];
+    u32 root_bone_list[header.data_count];
 };
 
 struct Bone{
@@ -29,6 +29,10 @@ struct Bone{
     padding[header.sector_size-0x50];
 };
 
-SectorHead main_header @ 0x0;
-RootTree root_tree_list @ 0x0C;
-Bone bone[main_header.data_count-1] @ 0x1C;
+struct BoneList {
+    SectorHead main_header;
+    RootTree root_bones_list;
+    Bone bone_list[main_header.data_count-1];
+};
+
+BoneList AHI @ 0x0;
